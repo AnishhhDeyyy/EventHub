@@ -1,9 +1,13 @@
 const validator = require('validator');
 const { User } = require('../../Models/User/app');
 const bcrypt = require('bcrypt');
+const { sendWelcomeEmail, sendEmailOtp } = require('../../Utils/Mailer/app');
+
 const register = async(req,res)=>{
     try{
         const { email,name,password,role, phone} = req.body;
+        console.log("Req",req.body);
+        
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)){
             return res.status(400).json({message: 'Invalid Email Address'});
@@ -19,7 +23,9 @@ const register = async(req,res)=>{
            return res.status(400).json({message: 'User already Exists'});
         }
         const hashedPassword = await bcrypt.hash(password,10);
-
+        await sendWelcomeEmail(email,name);
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        await sendEmailOtp(email,otp);
     }catch(err){
         console.log("Err",err);
         res.status(500).json({message: "Registration Failed"});
@@ -29,3 +35,5 @@ const register = async(req,res)=>{
 const findPhoneNumber = async(phone)=>{
     return validator.isMobilePhone(phone, 'any');
 }
+
+module.exports = { register }
