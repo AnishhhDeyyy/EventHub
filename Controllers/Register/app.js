@@ -2,6 +2,7 @@ const validator = require('validator');
 const { User } = require('../../Models/User/app');
 const bcrypt = require('bcrypt');
 const { sendWelcomeEmail, sendEmailOtp } = require('../../Utils/Mailer/app');
+const { sendOtpWhatsapp } = require('../../Utils/Phone/app');
 
 const register = async(req,res)=>{
     try{
@@ -26,6 +27,8 @@ const register = async(req,res)=>{
         await sendWelcomeEmail(email,name);
         const otp = Math.floor(100000 + Math.random() * 900000);
         await sendEmailOtp(email,otp);
+        const otpPhone = Math.floor(100000 + Math.random() * 900000);
+        await sendOtpWhatsapp(otpPhone,phone);
     }catch(err){
         console.log("Err",err);
         res.status(500).json({message: "Registration Failed"});
