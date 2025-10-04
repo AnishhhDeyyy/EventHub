@@ -3,6 +3,7 @@ const { User } = require('../../Models/User/app');
 const bcrypt = require('bcrypt');
 const { sendWelcomeEmail, sendEmailOtp } = require('../../Utils/Mailer/app');
 const { sendOtpWhatsapp } = require('../../Utils/Phone/app');
+const { UserOtp } = require('../../Models/UserOtp/app');
 
 const register = async(req,res)=>{
     try{
@@ -27,8 +28,21 @@ const register = async(req,res)=>{
         await sendWelcomeEmail(email,name);
         const otp = Math.floor(100000 + Math.random() * 900000);
         await sendEmailOtp(email,otp);
+        const expiresAt =  new Date(Date.now() + 10 * 60 * 1000); 
+        const userotpEmail = await UserOtp.create({
+            otp_type: 'email',
+            otp: otp,
+            expires_at: expiresAt,
+            created_at:  new Date(),
+        })
         const otpPhone = Math.floor(100000 + Math.random() * 900000);
        // await sendOtpWhatsapp(otpPhone,phone);
+       const userotpPhone = await UserOtp.create({
+            otp_type: 'phone',
+            otp: otpPhone,
+            expires_at: expiresAt,
+            created_at:  new Date(),
+        })
         const user = await User.create({
             name:name,
             PhoneNumber:phone,
@@ -36,6 +50,8 @@ const register = async(req,res)=>{
             password:hashedPassword,
             role: role
         });
+
+       
         console.log("User Created......");
         res.status(201).json({message:'Registration Successfull'})
     }catch(err){

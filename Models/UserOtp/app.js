@@ -11,11 +11,7 @@ const UserOtp = sequelize.define('Userotp',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    email_otp:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    phone_otp:{
+    otp:{
         type: DataTypes.STRING,
         allowNull: false
     },
