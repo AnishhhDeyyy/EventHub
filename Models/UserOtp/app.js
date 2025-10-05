@@ -11,6 +11,14 @@ const UserOtp = sequelize.define('Userotp',{
         type: DataTypes.STRING,
         allowNull: false
     },
+    email:{
+        type: DataTypes.STRING,
+        allowNull:false
+    },
+      PhoneNumber:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     otp:{
         type: DataTypes.STRING,
         allowNull: false

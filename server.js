@@ -3,6 +3,7 @@ const { dbConnection } = require("./Config/dbConnection");
 const { User } = require("./Models/User/app");
 const authrouter = require("./Routes/AuthRoutes/app");
 const { UserOtp } = require("./Models/UserOtp/app");
+const { verify } = require("./MiddleWare/verify/app");
 
 const app = express();
 

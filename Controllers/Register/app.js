@@ -27,13 +27,15 @@ const register = async(req,res)=>{
         const hashedPassword = await bcrypt.hash(password,10);
         await sendWelcomeEmail(email,name);
         const otp = Math.floor(100000 + Math.random() * 900000);
-        await sendEmailOtp(email,otp);
+    //    await sendEmailOtp(email,otp);
         const expiresAt =  new Date(Date.now() + 10 * 60 * 1000); 
         const userotpEmail = await UserOtp.create({
             otp_type: 'email',
             otp: otp,
             expires_at: expiresAt,
             created_at:  new Date(),
+            email:email,
+            PhoneNumber:phone
         })
         const otpPhone = Math.floor(100000 + Math.random() * 900000);
        // await sendOtpWhatsapp(otpPhone,phone);
@@ -42,6 +44,8 @@ const register = async(req,res)=>{
             otp: otpPhone,
             expires_at: expiresAt,
             created_at:  new Date(),
+            email:email,
+            PhoneNumber:phone
         })
         const user = await User.create({
             name:name,
